@@ -5,50 +5,59 @@
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+#define BUZZER_PIN 3 
 
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 RoboEyes<Adafruit_SSD1306> roboEyes(display);
 
 void setup() {
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    for(;;); 
-  }
+  pinMode(BUZZER_PIN, OUTPUT);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
   
-  // Initialize: width, height, radius, space between eyes
-  roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100);
-  
-  // Start with a calm face
+  roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 80); 
   roboEyes.setAutoblinker(ON, 3, 2);
-  roboEyes.setIdleMode(ON, 8, 4);   
+  roboEyes.setIdleMode(ON, 5, 2);   
 }
 
 void loop() {
   unsigned long currentMillis = millis();
-  int cycle = (currentMillis / 5000) % 4; // Changes emotion every 5 seconds
+  int cycle = (currentMillis / 6000) % 4; 
+
+  // --- PROCEDURAL VOICE SYNTHESIS ---
+  // We use math to create a "smooth" frequency that never stops
+  float modulation;
+  int finalFrequency;
 
   switch (cycle) {
-    case 0: // NORMAL
+    case 0: // NORMAL: Slow, calm breathing hum
       roboEyes.setMood(DEFAULT);
-      roboEyes.setVFlicker(OFF); 
+      modulation = sin(currentMillis * 0.003); // Slow wave
+      finalFrequency = 1800 + (modulation * 150); // Small smooth slide
       break;
 
-    case 1: // HAPPY / SMILING
-      roboEyes.setMood(HAPPY);  
+    case 1: // HAPPY: Fast, excited "warble"
+      roboEyes.setMood(HAPPY);
+      modulation = sin(currentMillis * 0.015); // Fast wave
+      finalFrequency = 2500 + (modulation * 600); // Big smooth slide
       break;
 
-    case 2: // CRYING / SAD
-      roboEyes.setMood(TIRED);  
-      // We simulate crying by making the eyes "vibrate" just a little
-      roboEyes.setVFlicker(ON, 2);
+    case 2: // SAD: Low, heavy "sobbing" vibration
+      roboEyes.setMood(TIRED);
+      modulation = sin(currentMillis * 0.002); 
+      finalFrequency = 500 + (modulation * 50); // Low and heavy
       break;
 
-    case 3: // HEART EYES / EXCITED
-      roboEyes.setMood(ANGRY);  
-      roboEyes.setVFlicker(OFF);
-      // This makes the eyes look "wide" and intense
+    case 3: // EXCITED: Chaotic digital "processing"
+      roboEyes.setMood(ANGRY);
+      // Rapidly jumping but smooth transitions
+      finalFrequency = 3000 + (random(-500, 500));
       break;
   }
 
+  // Continuous sound output (Zero delays = No lagging)
+  tone(BUZZER_PIN, finalFrequency);
+
+  // Update animations
   roboEyes.update();
 }
