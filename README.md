@@ -30,7 +30,8 @@ A simple, animated Emo-style face using:
 ## 📦 Required Libraries
 Install these in Arduino IDE:
 - Adafruit GFX  
-- Adafruit SSD1306  
+- Adafruit SSD1306
+- FluxGarage_RoboEyes  
 
 ## ▶️ How to Run
 1. Open `Emo-Face-Maker.ino` in Arduino IDE  
