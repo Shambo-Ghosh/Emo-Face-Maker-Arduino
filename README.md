@@ -55,8 +55,5 @@ Small buzzers can be sharp. For the best "Companion" sound, place a small piece 
 
 ---
 
-## 📜 License
-This project is released under the **MIT License**.
-
 ---
 *Inspired by social robots like EMO and Cozmo.*
