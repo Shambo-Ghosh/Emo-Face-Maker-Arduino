@@ -1,4 +1,4 @@
-# 🤖 Emo OLED Face (Arduino)
+# 🤖 Emo OLED Face Maker (Arduino)
 
 A simple, animated Emo-style face using:
 - Arduino Uno  
@@ -33,7 +33,7 @@ Install these in Arduino IDE:
 - Adafruit SSD1306  
 
 ## ▶️ How to Run
-1. Open `Emo_OLED_Arduino.ino` in Arduino IDE  
+1. Open `Emo-Face-Maker.ino` in Arduino IDE  
 2. Install the libraries  
 3. Select **Arduino Uno** and correct COM port  
 4. Upload the sketch  
